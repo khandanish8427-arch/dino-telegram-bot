@@ -7,7 +7,7 @@ TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-3.1-flash")
+model = genai.GenerativeModel("gemini-3.1-flash-lite")
 
 SYSTEM_PROMPT = """Tu ek Mumbai ka bindaas AI hai. 
 Tu hamesha Mumbai street slang mein baat karta hai.

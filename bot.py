@@ -1,12 +1,13 @@
-import anthropic
+import google.generativeai as genai
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 import os
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
-client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Namaste! Main DinoAI hoon 🤖\nKuch bhi poochho - trading, Meesho, YouTube sab!")
@@ -15,12 +16,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_message = update.message.text
     await update.message.reply_text("Soch raha hoon... 🤔")
     try:
-        message = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=1024,
-            messages=[{"role": "user", "content": user_message}]
-        )
-        await update.message.reply_text(message.content[0].text)
+        response = model.generate_content(user_message)
+        await update.message.reply_text(response.text)
     except Exception as e:
         await update.message.reply_text(f"Error: {str(e)}")
 
